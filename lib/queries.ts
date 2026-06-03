@@ -1,3 +1,4 @@
+import { unstable_noStore as noStore } from "next/cache";
 import { createSupabaseClient, hasSupabaseConfig } from "./supabase";
 import type { Topic, User, Vote } from "./types";
 
@@ -8,6 +9,8 @@ type TopicRow = {
 };
 
 export async function getTopics(): Promise<Topic[]> {
+  noStore();
+
   if (!hasSupabaseConfig()) {
     return [];
   }
@@ -35,6 +38,8 @@ export async function getTopics(): Promise<Topic[]> {
 }
 
 export async function getUsers(): Promise<User[]> {
+  noStore();
+
   if (!hasSupabaseConfig()) {
     return [];
   }
@@ -60,6 +65,8 @@ export async function areAllUsersVoted(): Promise<boolean> {
 }
 
 export async function getVotes(): Promise<Vote[]> {
+  noStore();
+
   if (!hasSupabaseConfig()) {
     return [];
   }

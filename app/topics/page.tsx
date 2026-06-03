@@ -2,6 +2,8 @@ import Link from "next/link";
 import { LightRouteView } from "../light-route-view";
 import { getTopics } from "@/lib/queries";
 
+export const dynamic = "force-dynamic";
+
 export default async function TopicsPage() {
   const topics = await getTopics();
 
