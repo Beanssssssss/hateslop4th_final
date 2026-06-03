@@ -1,0 +1,83 @@
+import { createSupabaseClient, hasSupabaseConfig } from "./supabase";
+import type { Topic, User, Vote } from "./types";
+
+type TopicRow = {
+  id: string;
+  title: string;
+  users: { name: string } | { name: string }[] | null;
+};
+
+export async function getTopics(): Promise<Topic[]> {
+  if (!hasSupabaseConfig()) {
+    return [];
+  }
+
+  const supabase = createSupabaseClient();
+
+  const { data, error } = await supabase
+    .from("topics")
+    .select("id, title, users(name)")
+    .order("title", { ascending: true });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return ((data as TopicRow[] | null) ?? []).map((topic) => {
+    const user = Array.isArray(topic.users) ? topic.users[0] : topic.users;
+
+    return {
+      id: topic.id,
+      title: topic.title,
+      userName: user?.name,
+    };
+  });
+}
+
+export async function getUsers(): Promise<User[]> {
+  if (!hasSupabaseConfig()) {
+    return [];
+  }
+
+  const supabase = createSupabaseClient();
+
+  const { data, error } = await supabase
+    .from("users")
+    .select("id, name, vote, weight")
+    .order("name", { ascending: true });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data ?? [];
+}
+
+export async function areAllUsersVoted(): Promise<boolean> {
+  const users = await getUsers();
+
+  return users.length > 0 && users.every((user) => user.vote === true);
+}
+
+export async function getVotes(): Promise<Vote[]> {
+  if (!hasSupabaseConfig()) {
+    return [];
+  }
+
+  const supabase = createSupabaseClient();
+
+  const { data, error } = await supabase
+    .from("votes")
+    .select("voter_id, topic_id, rank")
+    .order("rank", { ascending: true });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return (data ?? []).map((vote) => ({
+    voterId: String(vote.voter_id),
+    topicId: String(vote.topic_id),
+    rank: Number(vote.rank),
+  }));
+}
