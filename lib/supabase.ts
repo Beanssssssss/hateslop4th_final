@@ -1,4 +1,8 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+
+const globalForSupabase = globalThis as typeof globalThis & {
+  supabaseClient?: SupabaseClient;
+};
 
 export function hasSupabaseConfig() {
   return Boolean(
@@ -15,5 +19,9 @@ export function createSupabaseClient() {
     throw new Error("Missing Supabase environment variables.");
   }
 
-  return createClient(supabaseUrl, supabaseAnonKey);
+  if (!globalForSupabase.supabaseClient) {
+    globalForSupabase.supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
+  }
+
+  return globalForSupabase.supabaseClient;
 }

@@ -159,6 +159,7 @@ export function VoteForm({ topics, users, onCompleted }: VoteFormProps) {
       <label className="field">
         <span>투표자</span>
         <select
+          className="voter-select"
           name="voterId"
           value={selectedUserId}
           disabled={users.length === 0 || isVerified}

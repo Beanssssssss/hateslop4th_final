@@ -41,7 +41,9 @@ export function VoteShell({ topics, users }: VoteShellProps) {
       <main className="completion-page">
         <section className="complete-error-copy">
           <h1>404 Not Found</h1>
-          <p>{completedName} vote completed.</p>
+          <p>
+            <span className="topic-owner">{completedName}</span> vote completed.
+          </p>
           <p>메롱</p>
         </section>
       </main>

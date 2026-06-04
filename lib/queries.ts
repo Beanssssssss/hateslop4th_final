@@ -5,7 +5,7 @@ import type { Topic, User, Vote } from "./types";
 type TopicRow = {
   id: string;
   title: string;
-  users: { name: string } | { name: string }[] | null;
+  users: { id: string; name: string } | { id: string; name: string }[] | null;
 };
 
 export async function getTopics(): Promise<Topic[]> {
@@ -19,7 +19,7 @@ export async function getTopics(): Promise<Topic[]> {
 
   const { data, error } = await supabase
     .from("topics")
-    .select("id, title, users(name)")
+    .select("id, title, users(id, name)")
     .order("title", { ascending: true });
 
   if (error) {
@@ -32,6 +32,7 @@ export async function getTopics(): Promise<Topic[]> {
     return {
       id: topic.id,
       title: topic.title,
+      userId: user?.id,
       userName: user?.name,
     };
   });

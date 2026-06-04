@@ -516,6 +516,13 @@ select {
   padding: 0 14px;
 }
 
+.voter-select {
+  font-family:
+    var(--font-handwriting), "Comic Sans MS", "Bradley Hand", cursive;
+  font-size: 22px;
+  font-weight: 400;
+}
+
 .rank-grid {
   display: grid;
   gap: 16px;

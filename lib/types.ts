@@ -1,6 +1,7 @@
 export type Topic = {
   id: string;
   title: string;
+  userId?: string;
   userName?: string;
 };
 
